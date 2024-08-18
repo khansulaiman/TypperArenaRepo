@@ -54,7 +54,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/contest', contestRoute);
 app.use('/api/leaderboard', authMiddleware, childrenRoutes);
 app.use('/api/result', authMiddleware, childrenRoutes);
-app.use('/api/types', authMiddleware, childrenRoutes);
+app.use('/api/types', authMiddleware, childrenRoutes); // support for test types
 
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {
