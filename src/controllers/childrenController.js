@@ -24,7 +24,7 @@ const setLeaderboards = async (req, res, next) => {
  
      try {
  
-            const leaderboard = await children_services.setLeaderboard(user_id, position);
+            const leaderboard = await children_services.setLeaderboard({user_id, position});
 
             if(!leaderboard){
                 return res.status(404).json({
@@ -38,7 +38,7 @@ const setLeaderboards = async (req, res, next) => {
             return res.status(200).json({
                 STATUS: "SUCCESSFUL",
                 DB_DATA: leaderboard,
-                DESCRIPTION: "leaderboards fetched successfully",
+                DESCRIPTION: "leaderboards created successfully",
             });
 
  

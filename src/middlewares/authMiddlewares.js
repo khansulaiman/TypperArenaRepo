@@ -1,7 +1,9 @@
 const verifyToken = require("../services/jwtTokenService");
 const authMiddleware = (req, res, next) => {
 
-    const token = req.headers.authorization;
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+
     if (!token) {
         return res.status(401).json({
             STATUS: "ERROR",
@@ -12,6 +14,7 @@ const authMiddleware = (req, res, next) => {
     // Verify token (simplified)
     try {
 
+        console.log({token});
         const response = verifyToken.verifyToken(token);
         if (!response) {
             return res.status(401).json({

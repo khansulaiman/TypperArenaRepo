@@ -2,9 +2,9 @@
 const Joi = require('joi');
 
 const setTestResultSchema = Joi.object({
-    user_id: Joi.number().integer().required(),
-    test_type_id: Joi.number().integer().required(),
-    paragraph_id: Joi.number().integer().required(),
+    user_id: Joi.string().required(),
+    test_type_id: Joi.string().required(),
+    paragraph_id: Joi.string().required(),
     wpm: Joi.number().required(),
     accuracy: Joi.number().required(),
     raw: Joi.number().required(),
@@ -17,8 +17,8 @@ const setTestResultSchema = Joi.object({
 
 
 const setTestTypeSchema = Joi.object({
-    name: Joi.string().max(255).required(),
-    description: Joi.string().max(255).required(),
+    name: Joi.string().max(200).required(),
+    description: Joi.string().max(500).required(),
     created_at: Joi.date().timestamp().optional()  // Optional if not required from client
 });
 module.exports = {
