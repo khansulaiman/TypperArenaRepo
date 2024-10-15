@@ -153,7 +153,7 @@ const createUser = async (req, res, next) => {
 
         let jwt_token = jwt_services.generateToken({
             _id: user._id,
-            user_name: user.user_name,
+            user_name:  user.user_name,
             user_email: user.user_email,
             created_at: user.created_at,
             updated_at: user.updated_at

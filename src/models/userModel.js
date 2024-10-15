@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+
     _id: {
         type: mongoose.Schema.Types.ObjectId,
         auto: true,
@@ -18,6 +19,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    user_verify:{
+        type: Boolean,
+        default: false,
+    },
+    areana_user:{
+        type: Boolean,
+        default: false
+    },
+   online_status:{
+        type: Boolean,
+        default: false
+    },
+    gender:{
+        type: String,
+        enum: ['Male', 'Female', 'Others'],
+        default: 'Male',
+    },
     updated_at: {
         type: Number,
         default: () => Math.floor(Date.now() / 1000),
@@ -30,6 +48,6 @@ const userSchema = new mongoose.Schema({
 }, { toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
 
-const User = mongoose.model('users', userSchema);
+const User     = mongoose.model('users', userSchema);
 
 module.exports = User;

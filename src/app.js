@@ -1,13 +1,13 @@
 require('dotenv').config();
-const express        = require('express');
-const bodyParser     = require('body-parser');
-const cookieParser   = require('cookie-parser');
-const session        = require('express-session');
-const path           = require('path');
-const cors           = require('cors');
-const connectDB      = require('./config/db');
-const userRoutes     = require('./routes/userRoutes');
-const contestRoute   = require('./routes/contestRoute');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const path = require('path');
+const cors = require('cors');
+const connectDB = require('./config/db');
+const userRoutes = require('./routes/userRoutes');
+const contestRoute = require('./routes/contestRoute');
 const childrenRoutes = require('./routes/childrenRoutes');
 const authMiddleware = require("./middlewares/authMiddlewares");
 
@@ -51,10 +51,10 @@ app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/api/contest', authMiddleware, contestRoute);
+app.use('/api/contest',      contestRoute);//authMiddleware
 app.use('/api/leaderboard', authMiddleware, childrenRoutes);
-app.use('/api/result', authMiddleware, childrenRoutes);
-app.use('/api/types', authMiddleware, childrenRoutes); 
+app.use('/api/result',      authMiddleware, childrenRoutes);
+app.use('/api/types',       authMiddleware, childrenRoutes);
 
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {

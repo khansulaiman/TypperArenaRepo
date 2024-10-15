@@ -16,6 +16,23 @@ const setTestResultSchema = Joi.object({
 });
 
 
+const paragraphSchema = Joi.object({
+    contest_id: Joi.string().required().messages({
+        "string.empty": "Contest ID is required",
+        "string.base": "Contest ID must be a string"
+    }),
+    content: Joi.string().required().messages({
+        "string.empty": "Content is required",
+        "string.base": "Content must be a string"
+    }),
+    dificulty_level: Joi.string().required().messages({
+        "string.empty": "Dificulty level is required",
+        "string.base": "Dificulty level must be a string"
+    })
+});
+
+
+
 const setTestTypeSchema = Joi.object({
     name: Joi.string().max(200).required(),
     description: Joi.string().max(500).required(),
@@ -23,6 +40,7 @@ const setTestTypeSchema = Joi.object({
 });
 module.exports = {
     setTestResultSchema,
-    setTestTypeSchema
+    setTestTypeSchema,
+    paragraphSchema
     // Add more schemas as needed, e.g., anotherSchema
 };

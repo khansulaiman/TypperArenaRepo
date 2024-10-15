@@ -1,5 +1,5 @@
 const contest_services = require("../services/contestService");
-
+ const {paragraphSchema}= require("../validation/joiValidator");
 
 const getContest = async (req, res) => {
 
@@ -171,9 +171,150 @@ const addContestParticipant = async (req, res, next) => {
     }
 };
 
+const getContestParticipant = async (req, res, next) => {
+
+    const { contest_id, user_id } = req.params;
+
+    // Validate the contest_id
+    if (!contest_id) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "Contest ID is required"
+        });
+    }
+
+    // Validate the user_id
+    if (!user_id) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "User ID is required"
+        });
+    }
+
+    try {
+
+        const contest = await contest_services.getContestParticipant({contest_id, user_id});
+
+        if(!contest) {
+
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Contest Participants not found"
+            });
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: contest,
+            DESCRIPTION: "Contest fetched successfully",
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+        });
+    }
+}
+
+
+const addParagraph = async (req, res, next) => {
+
+    const { contest_id, content, dificulty_level } = req.body;
+
+
+    const { error, value } = paragraphSchema.validate({
+        contest_id, content, dificulty_level
+    });
+
+    if (error) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: error.details[0].message
+        });
+    }
+
+    try {
+
+        const paragraph = await contest_services.addParagraph({
+            contest_id,
+            content,
+            dificulty_level
+        });
+
+        if (!paragraph) {
+            return res.status(500).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "paragraph not added"
+            });
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: paragraph,
+            DESCRIPTION: "Paragraph created successfully",
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+        });
+    }
+
+};
+
+const getParagraph = async (req, res, next) => {
+
+    const { contest_id } = req.params;
+
+    console.log({ contest_id });
+    // Validate the contest_id
+    if (!contest_id) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "Contest ID is required"
+        });
+    }
+
+    try {
+
+        const paragraph = await contest_services.getParagraphs(contest_id);
+
+        if (!paragraph) {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Paragraph not found"
+
+            });
+        }        
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: paragraph,
+            DESCRIPTION: "Paragraph fetched successfully",
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+        });
+    }
+}
+
 
 module.exports = {
     addContest,
     getContest,
     addContestParticipant,
+    getContestParticipant,
+    addParagraph,
+    getParagraph
 };
