@@ -82,6 +82,7 @@ const getParagraphs = async (contest_id) => {
     console.log('Attempting to get paragraphs.', contest_id);
     try {
         const paragraphs = await paragraphsModel.find({contest_id: contest_id});
+        if(paragraphs.length === 0)  return null;
         return paragraphs;
     } catch (err) {
         console.log(err);
@@ -89,7 +90,32 @@ const getParagraphs = async (contest_id) => {
     }
 }
 
+const deleteParagraph = async (paragraph_id) => {
 
+    console.log('Attempting to delete paragraphs.', paragraph_id);
+    try {
+        const deletedParagraph = await paragraphsModel.findByIdAndDelete(paragraph_id);
+        return deletedParagraph;
+    } catch (err) {
+        console.log(err);
+        return null;
+    }
+
+}
+
+const deleteContest = async (contest_id) => {
+
+    console.log('Attempting to delete contest.', contest_id);
+
+    try {
+        const deletedContest = await Contest.findByIdAndDelete(contest_id);
+        return deletedContest;
+    } catch (err) {
+        console.log(err);
+        return null;
+    }
+
+}
 module.exports = {
     addContest,
     getContest,
@@ -97,4 +123,6 @@ module.exports = {
     getContestParticipant,
     addParagraph,
     getParagraphs,
+    deleteParagraph,
+    deleteContest,
 };

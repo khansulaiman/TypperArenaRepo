@@ -220,6 +220,47 @@ const getContestParticipant = async (req, res, next) => {
 }
 
 
+const getContestParticipantAll = async (req, res, next) => {
+
+    const { contest_id } = req.params;
+
+    // Validate the contest_id
+    if (!contest_id) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "Contest ID is required"
+        });
+    }
+
+    try {
+
+        const contest = await contest_services.getContestParticipant({contest_id});
+
+        if(!contest) {
+
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Contest Participants not found"
+            });
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: contest,
+            DESCRIPTION: "Contest fetched successfully",
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+        });
+    }
+}
+
+
 const addParagraph = async (req, res, next) => {
 
     const { contest_id, content, dificulty_level } = req.body;
@@ -310,11 +351,96 @@ const getParagraph = async (req, res, next) => {
 }
 
 
+const deleteParagraph = async (req, res, next) => {
+    const { paragraph_id } = req.params;
+
+    if (!paragraph_id) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "paragraph_id is required"
+        });
+    }
+
+    try {
+
+        const paragraph = await contest_services.deleteParagraph(paragraph_id);
+
+        if (!paragraph) {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Paragraph not found"
+
+            });
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: paragraph,
+            DESCRIPTION: "Paragraph deleted successfully",
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+
+        });
+    }
+}
+
+const deleteContest = async (req, res, next) => {
+
+    const { contest_id } = req.params;
+
+    if (!contest_id) {  
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "contest_id is required"
+        });
+    }
+
+    try {
+
+        const contest = await contest_services.deleteContest(contest_id);
+
+        if (!contest) {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Contest not found"
+
+            });
+
+
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: contest,
+            DESCRIPTION: "Contest deleted successfully",
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+
+        });
+    }
+
+}
+
 module.exports = {
     addContest,
     getContest,
     addContestParticipant,
     getContestParticipant,
     addParagraph,
-    getParagraph
+    getParagraph,
+    getContestParticipantAll,
+    deleteParagraph,
+    deleteContest,
 };
