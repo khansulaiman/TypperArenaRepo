@@ -51,7 +51,7 @@ app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/api/contest',      contestRoute);//authMiddleware
+app.use('/api/contest',     authMiddleware, contestRoute);
 app.use('/api/leaderboard', authMiddleware, childrenRoutes);
 app.use('/api/result',      authMiddleware, childrenRoutes);
 app.use('/api/types',       authMiddleware, childrenRoutes);
