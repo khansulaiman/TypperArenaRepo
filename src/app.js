@@ -7,9 +7,11 @@ const path = require('path');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
+// const adminRoute = require('./routes/adminRoute');
 const contestRoute = require('./routes/contestRoute');
 const childrenRoutes = require('./routes/childrenRoutes');
 const authMiddleware = require("./middlewares/authMiddlewares");
+const { admin } = require('googleapis/build/src/apis/admin');
 
 // Connect to MongoDB
 connectDB();
@@ -51,8 +53,10 @@ app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/api/contest',      contestRoute);
+app.use('/api/contest',     contestRoute);
 app.use('/api/leaderboard', authMiddleware, childrenRoutes);
+app.use('/api/module',      authMiddleware, childrenRoutes);
+app.use('/api/permission',  authMiddleware, childrenRoutes);
 app.use('/api/result',      authMiddleware, childrenRoutes);
 app.use('/api/types',       authMiddleware, childrenRoutes);
 

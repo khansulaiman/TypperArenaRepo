@@ -18,16 +18,19 @@ const setTestResultSchema = Joi.object({
 
 const paragraphSchema = Joi.object({
     contest_id: Joi.string().required().messages({
-        "string.empty": "Contest ID is required",
-        "string.base": "Contest ID must be a string"
+        "string.empty": "Contest ID is required!",
+        "string.required": "Contest ID is required!",
+        "string.base": "Contest ID must be a string!"
     }),
     content: Joi.string().required().messages({
-        "string.empty": "Content is required",
-        "string.base": "Content must be a string"
+        "string.empty": "Content is required!",
+        "string.required": "Content is required!",
+        "string.base": "Content must be a string!"
     }),
     dificulty_level: Joi.string().required().messages({
-        "string.empty": "Dificulty level is required",
-        "string.base": "Dificulty level must be a string"
+        "string.empty": "Dificulty level is required!",
+        "string.required": "Dificulty level is required!",
+        "string.base": "Dificulty level must be a string!"
     })
 });
 
@@ -38,9 +41,49 @@ const setTestTypeSchema = Joi.object({
     description: Joi.string().max(500).required(),
     created_at: Joi.date().timestamp().optional()  // Optional if not required from client
 });
+
+
+
+const addModuleSchema = Joi.object({
+    name: Joi.string()
+    .max(200)
+    .required()
+    .messages({
+      "string.empty": "Module name is required!",
+      "string.base" : "Module must be a string",
+      "any.required": "Module name is required!"
+    }),
+  description: Joi.string()
+    .max(500)
+    .required()
+    .messages({
+      "string.empty": "Module description is required!",
+      "string.base" : "Content must be a string",
+      "any.required": "Module description is required!"
+    }),
+});
+
+
+const addPermissionSchema = Joi.object({
+    name: Joi.string().max(200).required({
+         "string.empty": "Permission name is required!",
+         "string.required": "Permission name is required!",
+         "string.base": "Permission must be a string"
+    }),
+    description: Joi.string().max(500).required({
+         "string.empty": "Permission description is required!",
+         "string.required": "Permission description is required!",
+         "string.base": "Permission must be a string"
+    }),
+});
+
+
+
 module.exports = {
     setTestResultSchema,
     setTestTypeSchema,
-    paragraphSchema
+    paragraphSchema,
+    addModuleSchema,
+    addPermissionSchema
     // Add more schemas as needed, e.g., anotherSchema
 };

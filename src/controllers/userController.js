@@ -1,4 +1,5 @@
 const User          = require('../models/userModel');
+const ArenaUser     = require('../models/arenaUserModel');
 const user_services = require("../services/userService");
 const jwt_services  = require("../services/jwtTokenService");
 const bcrypt        = require('bcrypt');
@@ -155,6 +156,8 @@ const createUser = async (req, res, next) => {
             _id: user._id,
             user_name:  user.user_name,
             user_email: user.user_email,
+            online_status:user.online_status,
+            gender:user.gender,
             created_at: user.created_at,
             updated_at: user.updated_at
             });
@@ -188,9 +191,114 @@ const createUser = async (req, res, next) => {
     }
 };
 
+
+
+const createArenaUser = async (req, res, next) => {
+
+    const {user_name,user_email, password, gender} = req.body;
+
+    if (!user_name) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "User name is required"
+        })
+    }
+
+    if (!user_email) {
+
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "User email is required"
+        })
+    }
+
+    if (!password) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "Password is required"
+        })
+    }
+
+    if(!gender) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "Gender is required"
+        })
+    }
+
+
+    // if( req.arena_user != true){
+
+    //     return res.status(401).json({
+    //         STATUS: "ERROR",
+    //         ERROR_DESCRIPTION: "You are not authorized to perform this action"
+    //     })
+    // }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user_object = {
+        user_name,
+        user_email,
+        password: hashedPassword,
+        gender
+    };
+
+    try {
+
+        const response = await user_services.arenaUser(user_object);
+
+        if(response.STATUS == "ERROR") {
+            return res.status(400).json({
+                STATUS: response.STATUS,
+                ERROR_DESCRIPTION: response.ERROR_DESCRIPTION
+            });
+        }
+
+        let jwt_token = jwt_services.generateToken({
+            _id: response.DB_DATA._id,
+            user_name:  response.DB_DATA.user_name,
+            user_email: response.DB_DATA.user_email,
+            arena_user:true,
+            online_status:response.DB_DATA.online_status,
+            gender:response.DB_DATA.gender,
+            created_at: response.DB_DATA.created_at,
+            updated_at: response.DB_DATA.updated_at
+            });
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: {token: jwt_token,},
+            DESCRIPTION: "User created successfully",
+        });
+
+    } catch (error) {
+
+        if (error.code === 11000) { // MongoDB duplicate key error code
+            // Extracting the field that caused the duplicate error
+            const field = Object.keys(error.keyValue)[0];
+            const value = error.keyValue[field];
+    
+            return res.status(400).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: `The ${field} '${value}' is already in use. Please use a different ${field}.`,
+                // ERROR_LOCK: error.message, // Optional: include original error for debugging
+            });
+        } else {
+            // For other types of errors, you can send a generic or specific error response
+            return res.status(500).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "An unexpected error occurred. Please try again later.",
+                // ERROR_LOCK: error.message, // Optional: include original error for debugging
+            });
+        }
+    }
+};
+
+
+
 const login = async (req, res, next) => {
 
-    
     const { password, user_email } = req.body;
 
     try {
@@ -216,8 +324,10 @@ const login = async (req, res, next) => {
         // Store user data in session
         let jwt_token = jwt_services.generateToken({
             _id: user._id,
-            user_name: user.user_name,
+            user_name:  user.user_name,
             user_email: user.user_email,
+            online_status:user.online_status,
+            gender:user.gender,
             created_at: user.created_at,
             updated_at: user.updated_at
             });
@@ -240,7 +350,62 @@ const login = async (req, res, next) => {
 
 
 
+const arenaLogin = async (req, res, next) => {
+
+    const { password, user_email } = req.body;
+
+    try {
+
+        const user = await ArenaUser.findOne({ user_email });
+
+        if (!user) {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "User Not Found.",
+            });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Invalid credentials.",
+            });
+        }
+
+        // Store user data in session
+        let jwt_token = jwt_services.generateToken({
+            _id: user._id,
+            user_name:  user.user_name,
+            user_email: user.user_email,
+            arena_user:true,
+            online_status:user.online_status,
+            gender:user.gender,
+            created_at: user.created_at,
+            updated_at: user.updated_at
+            });
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: {token: jwt_token,},
+            DESCRIPTION: "User login successfully",
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ 
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "Technical Error"
+        });
+    }
+
+}
+
+
 module.exports = {
     createUser,
+    createArenaUser,
+    arenaLogin,
     login
 };

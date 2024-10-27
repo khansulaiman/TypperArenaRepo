@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const arenauserSchema = new mongoose.Schema({
 
     _id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -18,10 +18,6 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-    },
-    user_verify:{
-        type: Boolean,
-        default: false,
     },
    online_status:{
         type: Boolean,
@@ -44,6 +40,6 @@ const userSchema = new mongoose.Schema({
 }, { toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
 
-const User     = mongoose.model('users', userSchema);
+const User     = mongoose.model('arena_users', arenauserSchema);
 
 module.exports = User;
