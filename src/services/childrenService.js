@@ -93,6 +93,49 @@ const getUserPermission = async (userId) => {
     }
 }
 
+const getAllModules = async () => {
+
+    try{
+
+        const modules = await Modules.find();
+        if(!modules) return { 
+            STATUS: "ERROR", 
+            ERROR_DESCRIPTION: "Modules not found"
+        }
+        return { 
+            STATUS: "SUCCESSFUL", 
+            DB_DATA: modules, 
+            DESCRIPTION: "Modules found successfully!"
+        }
+    }
+    catch(error){
+        console.error("Error fetching modules:", error)
+        return { STATUS: "ERROR", ERROR_DESCRIPTION: "Error fetching modules!"}
+    }
+    }
+
+
+const getPermissions = async () => {
+    try{
+
+        const permissions = await PermissionModel.find();
+        if(!permissions) return { 
+            STATUS: "ERROR", 
+            ERROR_DESCRIPTION: "Permissions not found"
+        }
+        return { 
+            STATUS: "SUCCESSFUL", 
+            DB_DATA: permissions, 
+            DESCRIPTION: "Permissions found successfully!"
+        }
+    }
+    catch(error){
+        
+        console.error("Error fetching permissions:", error)
+        return { STATUS: "ERROR", ERROR_DESCRIPTION: "Error fetching permissions!"}
+    }
+    }
+
 // const addTimetable = async (userData) => {
 //     const timetable = await Timetable.create(userData);
 //     return timetable;
@@ -137,7 +180,9 @@ module.exports = {
     addModule,
     addPermission,
     assignPermission,
-    getUserPermission
+    getUserPermission,
+    getAllModules,
+    getPermissions
     // updataClass,
     // getClasses,
     // singleClass,

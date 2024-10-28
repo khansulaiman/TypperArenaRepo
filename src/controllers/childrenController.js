@@ -138,6 +138,7 @@ const addModule = async (req, res, next) => {
     }
 
     try {
+
         const result = await children_services.addModule(value);
 
         if (result.STATUS === "ERROR") {
@@ -200,6 +201,50 @@ const addPermission = async (req, res, next) =>{
 }
 
 
+const getUserModulePermission = async (req, res, next) =>{
+
+    try{
+
+        const modules = await children_services.getAllModules();
+
+        if (modules.STATUS === "ERROR") {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: modules.ERROR_DESCRIPTION
+            });
+        }
+
+
+        const permissions = await children_services.getPermissions();
+
+        if (permissions.STATUS === "ERROR") {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: permissions.ERROR_DESCRIPTION
+            });
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: { 
+                modules: modules.DB_DATA,
+                permissions: permissions.DB_DATA 
+            },
+            DESCRIPTION: "Module and Permission found successfully!"
+        });
+
+    }
+    catch(err){
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.stack
+        });
+
+    }
+
+}
 
 
 const assignPermission = async (req, res, next) =>{
@@ -314,5 +359,6 @@ module.exports = {
     addModule,
     addPermission,
     assignPermission,
-    getUserPermission
+    getUserPermission,
+    getUserModulePermission
 };

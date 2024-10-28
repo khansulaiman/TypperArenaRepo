@@ -10,6 +10,7 @@ router.post('/set_test_type', childrenController.setTestType);
 
 router.post('/add_module', childrenController.addModule);
 router.post('/add_permission', childrenController.addPermission);
+router.get('/user_module_permission', childrenController.getUserModulePermission);
 router.post('/assign_permission', childrenController.assignPermission);
 router.get('/user_permission/user_id/:user_id', childrenController.getUserPermission);
 
