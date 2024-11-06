@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="cryptomus" content="de169b73" />
+    <title>Typing Challenge Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 700px;
+            width: 100%;
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            line-height: 1.6;
+        }
+        .challenge-options {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+        .option {
+            text-align: center;
+            background-color: #e7e7e7;
+            padding: 15px;
+            border-radius: 5px;
+            width: 45%;
+        }
+        .option h2 {
+            font-size: 1.2em;
+        }
+        .option button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .option button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Typing Challenge Platform</h1>
+    <p>Welcome to our typing challenge platform! Here, you can participate in exciting typing challenges with two options:</p>
+    <ul>
+        <li><strong>Free Challenge:</strong> Join the challenge for free and test your typing speed and accuracy.</li>
+        <li><strong>Paid Challenge:</strong> Compete in the paid challenge to win rewards! Payments are made in coins using our integrated Cryptomus payment gateway.</li>
+    </ul>
+    <p>After payment, you’ll wait for the challenge to start. Compete to finish the task in the shortest time possible to win!</p>
+
+    <div class="challenge-options">
+        <div class="option">
+            <h2>Free Challenge</h2>
+            <button onclick="alert('Join the free challenge')">Join for Free</button>
+        </div>
+        <div class="option">
+            <h2>Paid Challenge</h2>
+            <p>Entry Fee: 1 USD</p>
+            <button onclick="payWithCryptomus()">Join & Pay</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function payWithCryptomus() {
+        // Simulate a fake API call
+        fetch("https://ac90-2400-adcc-152-a800-49e7-226d-a574-2778.ngrok-free.app/api/payments", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                userId: 1,
+                title: "Typing Challenge Payment",
+                body: "Payment for joining the typing challenge"
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Payment initiated successfully! Redirecting to challenge...");
+            console.log("Fake API Response:", data);
+        })
+        .catch(error => {
+            console.error("Error with the payment request:", error);
+            alert("Failed to initiate payment. Please try again.");
+        });
+    }
+</script>
+
+</body>
+</html>
