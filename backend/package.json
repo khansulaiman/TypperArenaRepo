@@ -1,9 +1,9 @@
 {
   "name": "typing-arena",
   "version": "1.0.0",
-  "main": "./src/app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
