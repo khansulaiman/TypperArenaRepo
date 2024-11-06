@@ -1,2 +1,2 @@
-node_modules/
-ngrok.exe
+backend/node_modules
+backend/ngrok.exe
