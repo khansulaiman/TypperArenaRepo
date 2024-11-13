@@ -21,6 +21,13 @@ router.post(
 );
 
 
+router.get(
+    '/arena',
+    // authMiddleware,
+    userController.getArenaUser
+);
+
+
 // Logout Route
 router.get('/logout', (req, res, next) => {
     req.session.destroy();

@@ -23,17 +23,17 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../public')));
+// app.use(express.static(path.join(__dirname, '../public')));
 
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'your_secret_key',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: false, // Set to true if using HTTPS
-        maxAge: (86400 * 1000) // 24 hour (adjust as needed)
-    }
-}));
+// app.use(session({
+//     secret: process.env.SESSION_SECRET || 'your_secret_key',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         secure: false, // Set to true if using HTTPS
+//         maxAge: (86400 * 1000) // 24 hour (adjust as needed)
+//     }
+// }));
 
 
 // Use Helmet to set security-related HTTP headers

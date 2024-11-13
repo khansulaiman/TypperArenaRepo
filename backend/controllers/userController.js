@@ -193,6 +193,36 @@ const createUser = async (req, res, next) => {
 
 
 
+const getArenaUser = async (req, res) => {
+
+    try {
+
+        const user = await ArenaUser.find();
+
+        if (!user) {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: user,
+            DESCRIPTION: "User fetched successfully",
+        });
+
+    } catch (err) {
+        
+        return res.status(500).json({
+            STATUS: "ERROR",
+            DESCRIPTION: "Technical error occurred. Please try again later.",
+        });
+
+    }
+
+};
+
 const createArenaUser = async (req, res, next) => {
 
     const {user_name,user_email, password, gender} = req.body;
@@ -406,6 +436,7 @@ const arenaLogin = async (req, res, next) => {
 module.exports = {
     createUser,
     createArenaUser,
+    getArenaUser,
     arenaLogin,
     login
 };
