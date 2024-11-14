@@ -285,20 +285,20 @@ const createArenaUser = async (req, res, next) => {
             });
         }
 
-        let jwt_token = jwt_services.generateToken({
-            _id: response.DB_DATA._id,
-            user_name:  response.DB_DATA.user_name,
-            user_email: response.DB_DATA.user_email,
-            arena_user:true,
-            online_status:response.DB_DATA.online_status,
-            gender:response.DB_DATA.gender,
-            created_at: response.DB_DATA.created_at,
-            updated_at: response.DB_DATA.updated_at
-            });
+        // let jwt_token = jwt_services.generateToken({
+            // _id: response.DB_DATA._id,
+            // user_name:  response.DB_DATA.user_name,
+            // user_email: response.DB_DATA.user_email,
+            // arena_user:true,
+            // online_status:response.DB_DATA.online_status,
+            // gender:response.DB_DATA.gender,
+            // created_at: response.DB_DATA.created_at,
+            // updated_at: response.DB_DATA.updated_at
+            // });
 
         return res.status(200).json({
             STATUS: "SUCCESSFUL",
-            DB_DATA: {token: jwt_token,},
+            DB_DATA: response.DB_DATA,
             DESCRIPTION: "User created successfully",
         });
 
