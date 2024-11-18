@@ -28,7 +28,7 @@ router.get(
 );
 
 router.delete(
-    '/arena',
+    '/arena/user_id/:id',
     // authMiddleware,
     userController.deleteArenaUser
 );
