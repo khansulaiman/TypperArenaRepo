@@ -332,9 +332,20 @@ const getUserPermission = async(req, res, next) =>{
             });
         }
 
+
+
+        const permissions = await children_services.getPermissions();
+
+        if (permissions.STATUS === "ERROR") {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: permissions.ERROR_DESCRIPTION
+            });
+        }
+
         return res.status(200).json({
             STATUS: "SUCCESSFUL",
-            DB_DATA: result,
+            DB_DATA: {result, permissions: permissions.DB_DATA},
             DESCRIPTION: "Permission found successfully!"
         });
 

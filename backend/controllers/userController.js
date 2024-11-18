@@ -223,6 +223,39 @@ const getArenaUser = async (req, res) => {
 
 };
 
+
+
+
+const deleteArenaUser = async (req, res) => {
+
+    try {
+
+        const user_id = req.params.id;
+
+        const user = await ArenaUser.deleteOne({ _id: user_id });
+        if (!user) {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "User not deleted"
+            });
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: user,
+            DESCRIPTION: "User deleted successfully",
+        });
+
+    } catch (err) {
+        
+        return res.status(500).json({
+            STATUS: "ERROR",
+            DESCRIPTION: "Technical error occurred. Please try again later.",
+        });
+
+    }
+
+};
 const createArenaUser = async (req, res, next) => {
 
     const {user_name,user_email, password, gender} = req.body;
@@ -438,5 +471,6 @@ module.exports = {
     createArenaUser,
     getArenaUser,
     arenaLogin,
-    login
+    login,
+    deleteArenaUser
 };

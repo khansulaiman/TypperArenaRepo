@@ -27,6 +27,12 @@ router.get(
     userController.getArenaUser
 );
 
+router.delete(
+    '/arena',
+    // authMiddleware,
+    userController.deleteArenaUser
+);
+
 
 // Logout Route
 router.get('/logout', (req, res, next) => {
