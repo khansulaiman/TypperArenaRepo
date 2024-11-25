@@ -376,7 +376,7 @@ const getSampleParagraph = async (req, res, next) => {
         }        
 
         return res.status(200).json({
-            STATUS: "SUCCESSFUL",
+            STATUS: "SUCCESSFUL", 
             DB_DATA: paragraph,
             DESCRIPTION: "Paragraph fetched successfully",
         });

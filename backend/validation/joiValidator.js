@@ -29,7 +29,7 @@ const paragraphSchema = Joi.object({
             "string.empty": "Content is required!",
             "string.base": "Content must be a string!",
         }),
-    dificulty_level: Joi.string()
+        difficulty_level: Joi.string()
         .required()
         .messages({
             "string.empty": "Difficulty level is required!",
