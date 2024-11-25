@@ -1,5 +1,4 @@
-const { content } = require('googleapis/build/src/apis/content');
-const mongoose    = require('mongoose');
+const mongoose = require('mongoose');
 
 const paragraphSchema = new mongoose.Schema({
     _id: {
@@ -10,36 +9,28 @@ const paragraphSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-
     contest_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'contests',
-        defualt:"null",
+        default: null,
     },
-    
-    typing_duration:{
-        type:Number,
-        default:0  // Type duration in minuts
+    typing_duration: {
+        type: Number,
+        default: 0, // Typing duration in minutes
     },
-
-    dificulty_level: {
-        type:String,
+    difficulty_level: { // Fixed spelling from `dificulty_level`
+        type: String,
         required: true,
         default: 'easy',
         enum: ['easy', 'medium', 'hard'],
     },
-
-    updated_at: {
-        type: Number,
-        default: () => Math.floor(Date.now() / 1000),
-    },
-
-    created_at: {
-        type: Number,
-        default: () => Math.floor(Date.now() / 1000),
+}, {
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
     },
 });
 
-const paragraphs = mongoose.model('paragraph', paragraphSchema);
+const Paragraph = mongoose.model('Paragraph', paragraphSchema);
 
-module.exports = paragraphs;
+module.exports = Paragraph;
