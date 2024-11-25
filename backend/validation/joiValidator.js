@@ -17,18 +17,29 @@ const setTestResultSchema = Joi.object({
 
 
 const paragraphSchema = Joi.object({
-    contest_id: Joi.string().optional(),
-    content: Joi.string().required().messages({
-        "string.empty": "Content is required!",
-        "string.required": "Content is required!",
-        "string.base": "Content must be a string!"
-    }),
-    dificulty_level: Joi.string().required().messages({
-        "string.empty": "Dificulty level is required!",
-        "string.required": "Dificulty level is required!",
-        "string.base": "Dificulty level must be a string!"
-    }),
-    typing_duration: Joi.number().optional(),
+    contest_id: Joi.string()
+        .allow(null) // Allows null or undefined for contest_id
+        .optional()
+        .messages({
+            "string.base": "Contest ID must be a string!",
+        }),
+    content: Joi.string()
+        .required()
+        .messages({
+            "string.empty": "Content is required!",
+            "string.base": "Content must be a string!",
+        }),
+    dificulty_level: Joi.string()
+        .required()
+        .messages({
+            "string.empty": "Difficulty level is required!",
+            "string.base": "Difficulty level must be a string!",
+        }),
+    typing_duration: Joi.number()
+        .optional()
+        .messages({
+            "number.base": "Typing duration must be a number!",
+        }),
 });
 
 
