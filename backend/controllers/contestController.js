@@ -263,10 +263,10 @@ const getContestParticipantAll = async (req, res, next) => {
 
 const addParagraph = async (req, res, next) => {
 
-    const { contest_id = null, content, dificulty_level, typing_duration = 0 } = req.body;
+    const { contest_id = null, content, difficulty_level, typing_duration = 0 } = req.body;
 
     const { error, value } = paragraphSchema.validate({
-        contest_id, content, dificulty_level, typing_duration
+        contest_id, content, difficulty_level, typing_duration
     });
 
     if (error) {
@@ -281,7 +281,7 @@ const addParagraph = async (req, res, next) => {
         const paragraph = await contest_services.addParagraph({
                 contest_id,
                 content,
-                dificulty_level,
+                difficulty_level,
                 typing_duration
         });
 
