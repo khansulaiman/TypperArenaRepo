@@ -90,6 +90,21 @@ const getParagraphs = async (contest_id) => {
     }
 }
 
+const getSampleParagraph = async () => {
+
+    // contest_id = toString(contest_id);
+    // console.log('Attempting to get paragraphs.', );
+    try {
+        const paragraphs = await paragraphsModel.find({contest_id: null});
+        if(paragraphs.length === 0)  return null;
+        return paragraphs;
+    } catch (err) {
+        console.log(err);
+        return null;
+    }
+}
+
+
 const deleteParagraph = async (paragraph_id) => {
 
     console.log('Attempting to delete paragraphs.', paragraph_id);
@@ -125,4 +140,5 @@ module.exports = {
     getParagraphs,
     deleteParagraph,
     deleteContest,
+    getSampleParagraph
 };

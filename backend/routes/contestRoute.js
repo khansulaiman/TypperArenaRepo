@@ -28,6 +28,7 @@ router.post(
     '/paragraph',
     contestController.addParagraph
 );
+
 router.delete(
     '/paragraph/paragraph_id/:paragraph_id',
     contestController.deleteParagraph
@@ -36,5 +37,7 @@ router.get(
     '/paragraph/contest_id/:contest_id',
     contestController.getParagraph
 );
+
+router.get('/paragraph/sample', contestController.getSampleParagraph);
 
 module.exports = router;

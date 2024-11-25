@@ -350,6 +350,47 @@ const getParagraph = async (req, res, next) => {
     }
 }
 
+const getSampleParagraph = async (req, res, next) => {
+
+    // const { contest_id } = req.params;
+
+    // console.log({ contest_id });
+    // Validate the contest_id
+    // if (!contest_id) {
+    //     return res.status(400).json({
+    //         STATUS: "ERROR",
+    //         ERROR_DESCRIPTION: "Contest ID is required"
+    //     });
+    // }
+
+    try {
+
+        const paragraph = await contest_services.getSampleParagraph();
+
+        if (!paragraph) {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Paragraph not found"
+
+            });
+        }        
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: paragraph,
+            DESCRIPTION: "Paragraph fetched successfully",
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+        });
+    }
+}
+
 
 const deleteParagraph = async (req, res, next) => {
     const { paragraph_id } = req.params;
@@ -443,4 +484,5 @@ module.exports = {
     getContestParticipantAll,
     deleteParagraph,
     deleteContest,
+    getSampleParagraph
 };
