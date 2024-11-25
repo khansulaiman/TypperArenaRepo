@@ -14,7 +14,7 @@ const paragraphSchema = new mongoose.Schema({
     contest_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'contests',
-        defualt:null,
+        defualt:"null",
     },
     
     typing_duration:{

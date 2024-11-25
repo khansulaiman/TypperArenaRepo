@@ -27,7 +27,8 @@ const paragraphSchema = Joi.object({
         "string.empty": "Dificulty level is required!",
         "string.required": "Dificulty level is required!",
         "string.base": "Dificulty level must be a string!"
-    })
+    }),
+    typing_duration: Joi.number().optional(),
 });
 
 
