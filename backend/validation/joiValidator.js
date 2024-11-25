@@ -17,11 +17,7 @@ const setTestResultSchema = Joi.object({
 
 
 const paragraphSchema = Joi.object({
-    contest_id: Joi.string().required().messages({
-        "string.empty": "Contest ID is required!",
-        "string.required": "Contest ID is required!",
-        "string.base": "Contest ID must be a string!"
-    }),
+    contest_id: Joi.string().optional(),
     content: Joi.string().required().messages({
         "string.empty": "Content is required!",
         "string.required": "Content is required!",

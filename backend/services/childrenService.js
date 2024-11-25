@@ -116,51 +116,25 @@ const getAllModules = async () => {
 
 
 const getPermissions = async () => {
-    try{
+    try {
 
         const permissions = await PermissionModel.find();
-        if(!permissions) return { 
-            STATUS: "ERROR", 
+        if (!permissions) return {
+            STATUS: "ERROR",
             ERROR_DESCRIPTION: "Permissions not found"
         }
-        return { 
-            STATUS: "SUCCESSFUL", 
-            DB_DATA: permissions, 
+        return {
+            STATUS: "SUCCESSFUL",
+            DB_DATA: permissions,
             DESCRIPTION: "Permissions found successfully!"
         }
     }
-    catch(error){
-        
+    catch (error) {
+
         console.error("Error fetching permissions:", error)
-        return { STATUS: "ERROR", ERROR_DESCRIPTION: "Error fetching permissions!"}
+        return { STATUS: "ERROR", ERROR_DESCRIPTION: "Error fetching permissions!" }
     }
-    }
-
-// const addTimetable = async (userData) => {
-//     const timetable = await Timetable.create(userData);
-//     return timetable;
-// };
-
-// const getTimetable = async () => {
-//     try {
-//         const timetable = await Timetable.find()
-//             .populate('teacher_id', 'user_name user_email') // Populate teacher with specific fields
-//             .populate('class_id', 'name description'); // Populate class with specific fields
-
-//         return timetable;
-//     } catch (error) {
-//         console.error("Error fetching timetable:", error);
-//         throw error;
-//     }
-// }
-// const updataClass = async (id,userData) => {
-//     const update_record = await Classes.findOneAndUpdate(
-//         {_id:id},
-//         userData,
-//     )
-//     return update_record;
-// };
-
+}
 
 // const getClasses = async () => {
 //     // const classes = await Classes.find(); // Fetch all users from the database
@@ -183,9 +157,4 @@ module.exports = {
     getUserPermission,
     getAllModules,
     getPermissions
-    // updataClass,
-    // getClasses,
-    // singleClass,
-    // addTimetable,
-    // getTimetable
 };
