@@ -94,6 +94,7 @@ const getSampleParagraph = async (typing_duration) => {
 
     try {
         const paragraphs = await paragraphsModel.find({contest_id: null, typing_duration: typing_duration});
+        console.log({paragraphs});
         if(paragraphs.length === 0)  return null;
         return paragraphs;
     } catch (err) {
