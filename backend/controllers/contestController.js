@@ -352,20 +352,11 @@ const getParagraph = async (req, res, next) => {
 
 const getSampleParagraph = async (req, res, next) => {
 
-    // const { contest_id } = req.params;
-
-    // console.log({ contest_id });
-    // Validate the contest_id
-    // if (!contest_id) {
-    //     return res.status(400).json({
-    //         STATUS: "ERROR",
-    //         ERROR_DESCRIPTION: "Contest ID is required"
-    //     });
-    // }
+    const  typing_duration  = req.query.duration;
 
     try {
 
-        const paragraph = await contest_services.getSampleParagraph();
+        const paragraph = await contest_services.getSampleParagraph(typing_duration);
 
         if (!paragraph) {
             return res.status(404).json({

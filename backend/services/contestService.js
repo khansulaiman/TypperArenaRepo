@@ -90,12 +90,10 @@ const getParagraphs = async (contest_id) => {
     }
 }
 
-const getSampleParagraph = async () => {
+const getSampleParagraph = async (typing_duration) => {
 
-    // contest_id = toString(contest_id);
-    // console.log('Attempting to get paragraphs.', );
     try {
-        const paragraphs = await paragraphsModel.find({contest_id: null});
+        const paragraphs = await paragraphsModel.find({contest_id: null, typing_duration: typing_duration});
         if(paragraphs.length === 0)  return null;
         return paragraphs;
     } catch (err) {
