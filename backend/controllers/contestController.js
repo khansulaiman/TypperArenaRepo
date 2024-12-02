@@ -352,7 +352,7 @@ const getParagraph = async (req, res, next) => {
 
 const getSampleParagraph = async (req, res, next) => {
 
-    const  typing_duration  = req.query.duration;
+    const  typing_duration  = req.params.duration;
     console.log({ typing_duration });
 
     try {
