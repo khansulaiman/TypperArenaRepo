@@ -51,20 +51,16 @@ const addContest = async (req, res, next) => {
             ERROR_DESCRIPTION: "Contest description is required"
         })
     }
-
-    if (!is_paid) {
-        return res.status(400).json({
-            STATUS: "ERROR",
-            ERROR_DESCRIPTION: "Contest payment status is required"
-        })
+    
+    if (is_paid) {
+        if (!fee) {
+            return res.status(400).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Contest fee is required"
+            })
+        }
     }
-
-    if (!fee) {
-        return res.status(400).json({
-            STATUS: "ERROR",
-            ERROR_DESCRIPTION: "Contest fee is required"
-        })
-    }
+   
 
     if (!start_date) {
         return res.status(400).json({

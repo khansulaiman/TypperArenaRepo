@@ -19,7 +19,8 @@ const contestSchema = new mongoose.Schema({
     },
     fee: {
         type: Number,
-        required: true,
+        default: 0,
+        // required: true,
     },
     start_date: {
         type: Number,

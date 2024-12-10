@@ -16,7 +16,7 @@ const paragraphSchema = new mongoose.Schema({
     },
     typing_duration: {
         type: Number,
-        default: 0, // Typing duration in minutes
+        default: 0, // Typing duration in seconds
     },
     difficulty_level: { // Fixed spelling from `dificulty_level`
         type: String,
