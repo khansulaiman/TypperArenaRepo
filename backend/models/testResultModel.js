@@ -6,10 +6,10 @@ const testResultSchema = new mongoose.Schema({
         required: true,
         ref: 'users', // Assuming you have a User model
     },
-    test_type_id: {
+    contest_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'test_types', // Assuming you have a TestType model
+        ref: 'contests', // Assuming you have a TestType model
     },
     paragraph_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -46,8 +46,8 @@ const testResultSchema = new mongoose.Schema({
         maxlength: 255,
     },
     created_at: {
-        type: Date,
-        default: Date.now,
+        type: Number,
+        default: () => Math.floor(Date.now() / 1000)
     },
 });
 

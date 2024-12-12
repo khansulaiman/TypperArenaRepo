@@ -3,8 +3,14 @@ const express = require('express');
 const router = express.Router();
 const contestController = require('../controllers/contestController');
 
-router.get('/', contestController.getContest);
-router.post('/', contestController.addContest);
+router.get('/', 
+    contestController.getContest
+);
+
+router.post(
+    '/',
+     contestController.addContest
+    );
 
 router.delete(
     '/contest_id/:contest_id', 
@@ -24,8 +30,6 @@ router.get(
     '/contest_participant/contest_id/:contest_id',
     contestController.getContestParticipantAll
 );
-
-
 
 router.post(
     '/paragraph',
