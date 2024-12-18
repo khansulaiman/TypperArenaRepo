@@ -36,6 +36,11 @@ router.post(
     contestController.addParagraph
 );
 
+router.patch(
+    '/paragraph/paragraph_id/:paragraph_id',
+    contestController.updateParagraph
+);
+
 router.delete(
     '/paragraph/paragraph_id/:paragraph_id',
     contestController.deleteParagraph

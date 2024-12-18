@@ -76,6 +76,37 @@ const addParagraph = async (paragraphOject) => {
     }
 }
 
+
+const updateParagraph = async (paragraphObject) => {
+    console.log('Attempting to update paragraphs.');
+
+    try {
+        const updatedParagraph = await paragraphsModel.findByIdAndUpdate(
+            paragraphObject.paragraph_id,
+            {
+                $set: {
+                    content: paragraphObject.content,
+                    difficulty_level: paragraphObject.difficulty_level,
+                    typing_duration: paragraphObject.typing_duration
+                }
+            },
+            { new: true } // This option returns the modified document
+        );
+
+        if (updatedParagraph) {
+            console.log('Updated paragraphs successfully.');
+            return updatedParagraph; // Return the updated document
+        } else {
+            console.log('No paragraph found with that ID.');
+            return null;
+        }
+    } catch (err) {
+        console.log(err);
+        console.log('Failed to update paragraphs.');
+        return null;
+    }
+}
+
 const getParagraphs = async (contest_id) => {
 
     // contest_id = toString(contest_id);
@@ -139,5 +170,6 @@ module.exports = {
     getParagraphs,
     deleteParagraph,
     deleteContest,
-    getSampleParagraph
+    getSampleParagraph,
+    updateParagraph
 };
