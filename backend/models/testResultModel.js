@@ -4,7 +4,7 @@ const testResultSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'user', // Assuming you have a User model
+        ref: 'users', // Assuming you have a User model
     },
     contest_id: {
         type: mongoose.Schema.Types.ObjectId,
