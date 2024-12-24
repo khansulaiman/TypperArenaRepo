@@ -397,6 +397,48 @@ const getParagraph = async (req, res, next) => {
     }
 }
 
+
+const getLeaderboard = async (req, res, next ) => {
+
+    const { contest_id } = req.params;
+
+    // Validate the contest_id
+    if (!contest_id) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "Contest ID is required"
+        });
+    }
+
+    try {
+
+        const leaderboard = await contest_services.getLeaderboard(contest_id);
+
+        if (!leaderboard) {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Leaderboard not found"
+
+            });
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: leaderboard,
+            DESCRIPTION: "Leaderboard fetched successfully",
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+        });
+    }
+
+}
+
 const getSampleParagraph = async (req, res, next) => {
 
     const  typing_duration  = req.params.duration;
@@ -524,5 +566,6 @@ module.exports = {
     deleteParagraph,
     deleteContest,
     getSampleParagraph,
-    updateParagraph
+    updateParagraph,
+    getLeaderboard
 };

@@ -135,6 +135,37 @@ const getSampleParagraph = async (typing_duration) => {
 }
 
 
+const getLeaderboard = async (contest_id, limit = 10) => {
+    console.log('Attempting to get leaderboard.', contest_id);
+
+    try {
+        const leaderboard = await TestResult.find({ contest_id }) // Corrected variable name
+            .sort({ wpm: -1, accuracy: -1 }) // Sort by WPM and then accuracy
+            .limit(limit) // Limit results to top N
+            .populate('user_id', 'name') // Populate user information (e.g., name)
+            .populate('paragraph_id', 'title'); // Populate paragraph information (e.g., title)
+
+        return leaderboard.map((entry, index) => ({
+            position: index + 1,
+            user: entry.user_id?.name || 'Unknown User',
+            paragraph: entry.paragraph_id?.title || 'Unknown Paragraph',
+            wpm: entry.wpm,
+            accuracy: entry.accuracy,
+            raw: entry.raw,
+            characters: entry.characters,
+            consistency: entry.consistency,
+            time: entry.time,
+            demography: entry.demography,
+        }));
+    } catch (err) {
+        console.error('Failed to get leaderboard:', err); // Improved error logging
+        return null;
+    }
+}
+
+
+
+
 const deleteParagraph = async (paragraph_id) => {
 
     console.log('Attempting to delete paragraphs.', paragraph_id);
@@ -171,5 +202,6 @@ module.exports = {
     deleteParagraph,
     deleteContest,
     getSampleParagraph,
-    updateParagraph
+    updateParagraph,
+    getLeaderboard
 };

@@ -1,19 +1,19 @@
 
 const express = require('express');
-const router = express.Router();
+const router  = express.Router();
 const contestController = require('../controllers/contestController');
 
-router.get('/', 
+router.get('/',
     contestController.getContest
 );
 
 router.post(
     '/',
-     contestController.addContest
-    );
+    contestController.addContest
+);
 
 router.delete(
-    '/contest_id/:contest_id', 
+    '/contest_id/:contest_id',
     contestController.deleteContest
 );
 
@@ -52,7 +52,12 @@ router.get(
 );
 
 router.get(
-    '/paragraph/sample/duration/:duration', 
+    '/leaderboard/contest_id/:contest_id',
+    contestController.getLeaderboard
+)
+
+router.get(
+    '/paragraph/sample/duration/:duration',
     contestController.getSampleParagraph
 );
 
