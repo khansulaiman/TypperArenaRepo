@@ -4,17 +4,17 @@ const testResultSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'users', // Assuming you have a User model
+        ref: 'user', // Assuming you have a User model
     },
     contest_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'contests', // Assuming you have a TestType model
+        ref: 'contest', // Assuming you have a TestType model
     },
     paragraph_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Paragraphs', // Assuming you have a Paragraph model
+        ref: 'Paragraph', // Assuming you have a Paragraph model
     },
     wpm: {
         type: Number,
