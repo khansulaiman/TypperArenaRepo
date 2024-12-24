@@ -9,12 +9,12 @@ const testResultSchema = new mongoose.Schema({
     contest_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'contest', // Assuming you have a TestType model
+        ref: 'contests', // Assuming you have a TestType model
     },
     paragraph_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Paragraph', // Assuming you have a Paragraph model
+        ref: 'Paragraphs', // Assuming you have a Paragraph model
     },
     wpm: {
         type: Number,

@@ -143,13 +143,13 @@ const getLeaderboard = async (contest_id, limit = 10) => {
         const leaderboard = await testResultModel.find({ contest_id }) // Corrected variable name
             .sort({ wpm: -1, accuracy: -1 }) // Sort by WPM and then accuracy
             .limit(limit) // Limit results to top N
-            .populate('user_id', 'name') // Populate user information (e.g., name)
-            .populate('paragraph_id', 'title'); // Populate paragraph information (e.g., title)
+            .populate('user_id', 'user_name') // Populate user information (e.g., name)
+            .populate('paragraph_id', 'content'); // Populate paragraph information (e.g., title)
 
         return leaderboard.map((entry, index) => ({
             position: index + 1,
-            user: entry.user_id?.name || 'Unknown User',
-            paragraph: entry.paragraph_id?.title || 'Unknown Paragraph',
+            user: entry.user_id?.user_name || 'Unknown User',
+            paragraph: entry.paragraph_id?.content || 'Unknown Paragraph',
             wpm: entry.wpm,
             accuracy: entry.accuracy,
             raw: entry.raw,
