@@ -1,6 +1,7 @@
 const Contest = require('../models/contestModel'); // Ensure the path is correct
 const contestParticipantModel = require('../models/contestParticipantModel'); // Ensure the path is correct
 const paragraphsModel = require("../models/paragraphModel");
+const testResultModel = require("../models/testResultModel");
 
 const addContest = async (userData) => {
     try {
@@ -139,7 +140,7 @@ const getLeaderboard = async (contest_id, limit = 10) => {
     console.log('Attempting to get leaderboard.', contest_id);
 
     try {
-        const leaderboard = await TestResult.find({ contest_id }) // Corrected variable name
+        const leaderboard = await testResultModel.find({ contest_id }) // Corrected variable name
             .sort({ wpm: -1, accuracy: -1 }) // Sort by WPM and then accuracy
             .limit(limit) // Limit results to top N
             .populate('user_id', 'name') // Populate user information (e.g., name)
