@@ -3,7 +3,7 @@ const Joi = require('joi');
 
 const setTestResultSchema = Joi.object({
     user_id: Joi.string().required(),
-    test_type_id: Joi.string().required(),
+    contest_id: Joi.string().required(),
     paragraph_id: Joi.string().required(),
     wpm: Joi.number().required(),
     accuracy: Joi.number().required(),
