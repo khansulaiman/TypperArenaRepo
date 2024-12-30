@@ -472,6 +472,38 @@ const getSampleParagraph = async (req, res, next) => {
     }
 }
 
+const getSampleParagraphList = async (req, res, next) => {
+
+    // const  typing_duration  = req.params.duration;
+    // console.log({ typing_duration });
+
+    try {
+
+        const paragraph = await contest_services.getSampleParagraphList();
+
+        if (!paragraph) {
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Paragraph not found"
+
+            });
+        }        
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL", 
+            DB_DATA: paragraph,
+            DESCRIPTION: "Paragraph fetched successfully",
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+        });
+    }
+}
 
 const deleteParagraph = async (req, res, next) => {
     const { paragraph_id } = req.params;
@@ -567,5 +599,6 @@ module.exports = {
     deleteContest,
     getSampleParagraph,
     updateParagraph,
-    getLeaderboard
+    getLeaderboard,
+    getSampleParagraphList
 };

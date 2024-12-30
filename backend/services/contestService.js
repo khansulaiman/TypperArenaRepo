@@ -135,6 +135,19 @@ const getSampleParagraph = async (typing_duration) => {
     }
 }
 
+const getSampleParagraphList = async () => {
+
+    try {
+        const paragraphs = await paragraphsModel.find({contest_id: null});
+        console.log({paragraphs});
+        if(paragraphs.length === 0)  return null;
+        return paragraphs;
+    } catch (err) {
+        console.log(err);
+        return null;
+    }
+}
+
 
 const getLeaderboard = async (contest_id, limit = 10) => {
     console.log('Attempting to get leaderboard.', contest_id);
@@ -204,5 +217,6 @@ module.exports = {
     deleteContest,
     getSampleParagraph,
     updateParagraph,
-    getLeaderboard
+    getLeaderboard,
+    getSampleParagraphList
 };

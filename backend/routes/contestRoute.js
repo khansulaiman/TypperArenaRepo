@@ -61,4 +61,10 @@ router.get(
     contestController.getSampleParagraph
 );
 
+router.get(
+    '/paragraph/sample/list',
+    contestController.getSampleParagraphList
+);
+
+// getSampleParagraphList
 module.exports = router;
