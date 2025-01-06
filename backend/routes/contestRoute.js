@@ -30,6 +30,11 @@ router.get(
 router.get(
     '/user_contest/user_id/:user_id',
     contestController.getUserContest
+);
+
+router.get(
+    '/notification_data/user_id/:user_id',
+    contestController.GetNotificationData
 )
 
 router.get(

@@ -258,6 +258,49 @@ const getUserContest = async (req, res, next) => {
 }
 
 
+const GetNotificationData = async (req, res, next) => {
+
+    const { user_id } = req.params;
+
+    // Validate the user_id
+    if (!user_id) {
+        return res.status(400).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "User ID is required"
+        });
+    }
+
+    try {
+
+        const notification = await contest_services.GetNotificationData(user_id);
+
+        if(!notification) {
+
+            return res.status(404).json({
+                STATUS: "ERROR",
+                ERROR_DESCRIPTION: "Contest Participants not found"
+            });
+        }
+
+        return res.status(200).json({
+            STATUS: "SUCCESSFUL",
+            DB_DATA: notification,
+            DESCRIPTION: "Notification fetched successfully",
+        });
+
+    } catch (err) {
+        
+        return res.status(500).json({
+            STATUS: "ERROR",
+            ERROR_DESCRIPTION: "TECHNICAL ERROR",
+            ERROR_LOCK: err.message
+        });
+
+    }
+
+}
+
+
 const getContestParticipantAll = async (req, res, next) => {
 
     const { contest_id } = req.params;
@@ -643,5 +686,6 @@ module.exports = {
     updateParagraph,
     getLeaderboard,
     getSampleParagraphList,
-    getUserContest
+    getUserContest,
+    GetNotificationData
 };

@@ -89,6 +89,62 @@ const getUserContest = async (user_id) => {
     }
 };
 
+
+const GetNotificationData = async (user_id) => {
+    try {
+        const currentTime = new Date();
+        const currentUnixTime = Math.floor(currentTime.getTime() / 1000);
+        const contestParticipants = await contestParticipantModel.aggregate([
+            { $match: { user_id } },
+            {
+                $lookup: {
+                    from: 'contests',
+                    localField: 'contest_id',
+                    foreignField: '_id',
+                    as: 'contest_data'
+                }
+            },
+            { $unwind: '$contest_data' },
+            { $match: { 'contest_data.start_date': { $gt: currentUnixTime } } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'user_id',
+                    foreignField: '_id',
+                    as: 'user_data'
+                }
+            },
+            { $unwind: '$user_data' },
+            {
+                $project: {
+                    user_id: 1,
+                    contest_id: 1,
+                    refundable: 1,
+                    status: 1,
+                    joined_at: 1,
+                    'contest_data.name': 1,
+                    'contest_data.description': 1,
+                    'contest_data.start_date': 1,
+                    'contest_data.end_date': 1,
+                    'contest_data.is_paid': 1,
+                    'contest_data.fee': 1,
+
+                }
+            }
+        ]);
+
+      
+
+        return {
+            contestParticipants,
+            contestCount: contestParticipants.length
+        };
+    } catch (err) {
+        console.error('Failed to get user contest:', err);
+        return null;
+    }
+};
+
 const addParagraph = async (paragraphOject) => {
 
     console.log('Attempting to add paragraphs.');
@@ -246,5 +302,6 @@ module.exports = {
     updateParagraph,
     getLeaderboard,
     getSampleParagraphList,
-    getUserContest
+    getUserContest,
+    GetNotificationData
 };
