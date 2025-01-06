@@ -70,7 +70,6 @@ const getUserContest = async (user_id) => {
                 {
                     path: 'contest_id',
                     model: 'contest',
-                    select: 'name total_participants',
                 },
                 {
                     path: 'user_id',
