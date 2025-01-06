@@ -94,7 +94,12 @@ const GetNotificationData = async (user_id) => {
     try {
         const currentTime = new Date();
         const currentUnixTime = Math.floor(currentTime.getTime() / 1000);
-        console.log({currentUnixTime});
+        console.log({ currentUnixTime });
+
+        if (typeof user_id === 'string') {
+            user_id = mongoose.Types.ObjectId(user_id);
+        }
+
         const contestParticipants = await contestParticipantModel.aggregate([
             { $match: { user_id } },
             {
@@ -105,7 +110,7 @@ const GetNotificationData = async (user_id) => {
                     as: 'contest_data'
                 }
             },
-            { $unwind: '$contest_data' },
+            { $unwind: { path: '$contest_data', preserveNullAndEmptyArrays: true } },
             { $match: { 'contest_data.start_date': { $gt: currentUnixTime } } },
             {
                 $lookup: {
@@ -115,7 +120,7 @@ const GetNotificationData = async (user_id) => {
                     as: 'user_data'
                 }
             },
-            { $unwind: '$user_data' },
+            { $unwind: { path: '$user_data', preserveNullAndEmptyArrays: true } },
             {
                 $project: {
                     user_id: 1,
@@ -129,12 +134,11 @@ const GetNotificationData = async (user_id) => {
                     'contest_data.end_date': 1,
                     'contest_data.is_paid': 1,
                     'contest_data.fee': 1,
-
                 }
             }
         ]);
 
-      console.log({contestParticipants});
+        console.log({ contestParticipants });
 
         return {
             contestParticipants,
