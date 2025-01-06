@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Contest = require('../models/contestModel'); // Ensure the path is correct
 const contestParticipantModel = require('../models/contestParticipantModel'); // Ensure the path is correct
 const paragraphsModel = require("../models/paragraphModel");
