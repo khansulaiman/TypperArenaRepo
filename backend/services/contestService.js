@@ -94,11 +94,12 @@ const GetNotificationData = async (user_id) => {
     try {
         const currentTime = new Date();
         const currentUnixTime = Math.floor(currentTime.getTime() / 1000);
+        console.log({currentUnixTime});
         const contestParticipants = await contestParticipantModel.aggregate([
             { $match: { user_id } },
             {
                 $lookup: {
-                    from: 'contests',
+                    from: 'contest',
                     localField: 'contest_id',
                     foreignField: '_id',
                     as: 'contest_data'
@@ -133,7 +134,7 @@ const GetNotificationData = async (user_id) => {
             }
         ]);
 
-      
+      console.log({contestParticipants});
 
         return {
             contestParticipants,
