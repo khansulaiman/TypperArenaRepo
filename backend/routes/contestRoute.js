@@ -21,10 +21,16 @@ router.post(
     '/contest_participant',
     contestController.addContestParticipant
 );
+
 router.get(
     '/contest_participant/contest_id/:contest_id/user_id/:user_id',
     contestController.getContestParticipant
 );
+
+router.get(
+    '/user_contest/user_id/:user_id',
+    contestController.getUserContest
+)
 
 router.get(
     '/contest_participant/contest_id/:contest_id',

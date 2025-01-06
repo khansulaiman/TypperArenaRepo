@@ -62,6 +62,34 @@ const getContestParticipant = async (contestUser) => {
     }
 };
 
+
+const getUserContest = async (user_id) => {
+    try {
+        const contestParticipants = await contestParticipantModel.find({ user_id })
+            .populate([
+                {
+                    path: 'contest_id',
+                    model: 'contest',
+                    select: 'name total_participants',
+                },
+                {
+                    path: 'user_id',
+                    model: 'users',
+                    select: 'user_name user_email gender',
+                }
+            ])
+            .select('user_id contest_id refundable status joined_at');
+
+        return {
+            contestParticipants,
+            contestCount: contestParticipants.length
+        };
+    } catch (err) {
+        console.error('Failed to get user contest:', err);
+        return null;
+    }
+};
+
 const addParagraph = async (paragraphOject) => {
 
     console.log('Attempting to add paragraphs.');
@@ -218,5 +246,6 @@ module.exports = {
     getSampleParagraph,
     updateParagraph,
     getLeaderboard,
-    getSampleParagraphList
+    getSampleParagraphList,
+    getUserContest
 };
