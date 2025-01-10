@@ -93,51 +93,26 @@ const getUserContest = async (user_id) => {
 
 const GetNotificationData = async (user_id) => {
     try {
-        const currentTime = new Date();
+        const currentTime     = new Date();
         const currentUnixTime = Math.floor(currentTime.getTime() / 1000);
         console.log({ currentUnixTime });
 
-        if (typeof user_id === 'string') {
-            user_id = mongoose.Types.ObjectId(user_id);
-        }
-
-        const contestParticipants = await contestParticipantModel.aggregate([
-            { $match: { user_id } },
+        const contestParticipants = await contestParticipantModel.find({
+            user_id,
+            'contest_id.start_date': { $gt: currentUnixTime }
+        })
+        .populate([
             {
-                $lookup: {
-                    from: 'contest',
-                    localField: 'contest_id',
-                    foreignField: '_id',
-                    as: 'contest_data'
-                }
+                path: 'contest_id',
+                model: 'contest',
             },
-            { $unwind: { path: '$contest_data', preserveNullAndEmptyArrays: true } },
-            { $match: { 'contest_data.start_date': { $gt: currentUnixTime } } },
             {
-                $lookup: {
-                    from: 'users',
-                    localField: 'user_id',
-                    foreignField: '_id',
-                    as: 'user_data'
-                }
-            },
-            { $unwind: { path: '$user_data', preserveNullAndEmptyArrays: true } },
-            {
-                $project: {
-                    user_id: 1,
-                    contest_id: 1,
-                    refundable: 1,
-                    status: 1,
-                    joined_at: 1,
-                    'contest_data.name': 1,
-                    'contest_data.description': 1,
-                    'contest_data.start_date': 1,
-                    'contest_data.end_date': 1,
-                    'contest_data.is_paid': 1,
-                    'contest_data.fee': 1,
-                }
+                path: 'user_id',
+                model: 'users',
+                select: 'user_name user_email gender',
             }
-        ]);
+        ])
+        .select('user_id contest_id refundable status joined_at');
 
         console.log({ contestParticipants });
 
