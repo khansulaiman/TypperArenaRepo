@@ -104,9 +104,9 @@ const GetNotificationData = async (user_id) => {
 
         // Define query filter
         const queryFilter = {
-            user_id,
-            'contest_id.start_date': { $gt: currentUnixTime },
+            user_id
         };
+        // 'contest_id.start_date': { $gt: currentUnixTime },
 
         console.log('Query Filter:', queryFilter);
 
