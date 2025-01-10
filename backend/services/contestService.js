@@ -93,38 +93,64 @@ const getUserContest = async (user_id) => {
 
 const GetNotificationData = async (user_id) => {
     try {
-        const currentTime     = new Date();
-        const currentUnixTime = Math.floor(currentTime.getTime() / 1000);
-        console.log({ currentUnixTime });
+        // Ensure user_id is provided
+        if (!user_id) {
+            throw new Error('User ID is required');
+        }
 
-        const contestParticipants = await contestParticipantModel.find({
+        // Get current Unix timestamp
+        const currentUnixTime = Math.floor(Date.now() / 1000);
+        console.log('Current Unix Time:', currentUnixTime);
+
+        // Define query filter
+        const queryFilter = {
             user_id,
-            'contest_id.start_date': { $gt: currentUnixTime }
-        })
-        .populate([
-            {
-                path: 'contest_id',
-                model: 'contest',
-            },
-            {
-                path: 'user_id',
-                model: 'users',
-                select: 'user_name user_email gender',
-            }
-        ])
-        .select('user_id contest_id refundable status joined_at');
+            'contest_id.start_date': { $gt: currentUnixTime },
+        };
 
-        console.log({ contestParticipants });
+        console.log('Query Filter:', queryFilter);
 
+        // Fetch contest participants
+        const contestParticipants = await contestParticipantModel
+            .find(queryFilter)
+            .populate([
+                {
+                    path: 'contest_id',
+                    model: 'contest',
+                },
+                {
+                    path: 'user_id',
+                    model: 'users',
+                    select: 'user_name user_email gender',
+                },
+            ])
+            .select('user_id contest_id refundable status joined_at');
+
+        // Log results for debugging
+        console.log('Contest Participants:', contestParticipants);
+
+        // Return the response
         return {
-            contestParticipants,
-            contestCount: contestParticipants.length
+            STATUS: "SUCCESSFUL",
+            DB_DATA: {
+                contestParticipants: contestParticipants || [],
+                contestCount: contestParticipants.length || 0,
+            },
+            DESCRIPTION: contestParticipants.length
+                ? "Notification fetched successfully"
+                : "No upcoming contests found for the user",
         };
     } catch (err) {
-        console.error('Failed to get user contest:', err);
-        return null;
+        // Handle errors
+        console.error('Failed to get user contest:', err.message, err.stack);
+        return {
+            STATUS: "FAILED",
+            DESCRIPTION: "An error occurred while fetching notifications",
+            ERROR: err.message,
+        };
     }
 };
+
 
 const addParagraph = async (paragraphOject) => {
 
