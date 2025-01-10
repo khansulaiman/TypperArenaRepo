@@ -92,8 +92,8 @@ const getUserContest = async (user_id) => {
 
 
 const GetNotificationData = async (user_id) => {
+    
     try {
-        // Ensure user_id is provided
         if (!user_id) {
             throw new Error('User ID is required');
         }
@@ -102,38 +102,58 @@ const GetNotificationData = async (user_id) => {
         const currentUnixTime = Math.floor(Date.now() / 1000);
         console.log('Current Unix Time:', currentUnixTime);
 
-        // Define query filter
-        const queryFilter = {
-            user_id
-        };
-        // 'contest_id.start_date': { $gt: currentUnixTime },
-
-        console.log('Query Filter:', queryFilter);
-
-        // Fetch contest participants
-        const contestParticipants = await contestParticipantModel
-            .find(queryFilter)
-            .populate([
-                {
-                    path: 'contest_id',
-                    model: 'contest',
+        // Use aggregation to filter by contest_id.start_date
+        const contestParticipants = await contestParticipantModel.aggregate([
+            {
+                $match: { user_id },
+            },
+            {
+                $lookup: {
+                    from: 'contest', // Name of the contest collection
+                    localField: 'contest_id',
+                    foreignField: '_id',
+                    as: 'contest',
                 },
-                {
-                    path: 'user_id',
-                    model: 'users',
-                    select: 'user_name user_email gender',
+            },
+            {
+                $unwind: '$contest',
+            },
+            {
+                $match: { 'contest.start_date': { $gte: currentUnixTime } },
+            },
+            {
+                $lookup: {
+                    from: 'users', // Name of the users collection
+                    localField: 'user_id',
+                    foreignField: '_id',
+                    as: 'user',
                 },
-            ])
-            .select('user_id contest_id refundable status joined_at');
+            },
+            {
+                $unwind: '$user',
+            },
+            {
+                $project: {
+                    user_id: 1,
+                    contest_id: '$contest._id',
+                    'contest.start_date': 1,
+                    refundable: 1,
+                    status: 1,
+                    joined_at: 1,
+                    'user.user_name': 1,
+                    'user.user_email': 1,
+                    'user.gender': 1,
+                },
+            },
+        ]);
 
-        // Log results for debugging
         console.log('Contest Participants:', contestParticipants);
 
         // Return the response
         return {
             STATUS: "SUCCESSFUL",
             DB_DATA: {
-                contestParticipants: contestParticipants || [],
+                contestParticipants,
                 contestCount: contestParticipants.length || 0,
             },
             DESCRIPTION: contestParticipants.length
@@ -141,7 +161,6 @@ const GetNotificationData = async (user_id) => {
                 : "No upcoming contests found for the user",
         };
     } catch (err) {
-        // Handle errors
         console.error('Failed to get user contest:', err.message, err.stack);
         return {
             STATUS: "FAILED",
@@ -150,6 +169,7 @@ const GetNotificationData = async (user_id) => {
         };
     }
 };
+
 
 
 const addParagraph = async (paragraphOject) => {
