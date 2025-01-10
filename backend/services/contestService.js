@@ -106,7 +106,7 @@ const GetNotificationData = async (user_id) => {
         const contestParticipants = await contestParticipantModel.aggregate([
             // Step 1: Match the user_id
             {
-                $match: { user_id: mongoose.Types.ObjectId(user_id) }, // Ensure user_id is an ObjectId
+                $match: { user_id: new mongoose.Types.ObjectId(user_id) }, // Ensure user_id is an ObjectId
             },
             // Step 2: Lookup contest details
             {
