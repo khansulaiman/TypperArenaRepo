@@ -100,48 +100,25 @@ const GetNotificationData = async (user_id) => {
 
         // Get the current Unix timestamp
         const currentUnixTime = Math.floor(Date.now() / 1000);
+        console.log('Current Unix Time:', currentUnixTime);
 
-        // Use MongoDB's aggregation pipeline to filter out contests that have already ended
-        const activeContests = await contestParticipantModel.aggregate([
+        // Aggregation pipeline
+        const contestParticipants = await contestParticipantModel.find({ user_id })
+            .populate([
             {
-                $match: {
-                    user_id,
-                    'contest_id.start_date': { $gt: currentUnixTime }
-                }
+                path: 'contest_id',
+                model: 'contest',
             },
             {
-                $lookup: {
-                    from: 'contests',
-                    localField: 'contest_id',
-                    foreignField: '_id',
-                    as: 'contest_id'
-                }
-            },
-            {
-                $unwind: '$contest_id'
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'user_id',
-                    foreignField: '_id',
-                    as: 'user_id'
-                }
-            },
-            {
-                $unwind: '$user_id'
-            },
-            {
-                $project: {
-                    _id: 1,
-                    user_id: '$user_id',
-                    contest_id: '$contest_id',
-                    refundable: 1,
-                    status: 1,
-                    joined_at: 1
-                }
+                path: 'user_id',
+                model: 'users',
+                select: 'user_name user_email gender',
             }
-        ]);
+            ])
+            .select('user_id contest_id refundable status joined_at');
+
+        // Filter out contests that have already ended
+        const activeContests = contestParticipants.filter(contest => contest.contest_id.start_date > currentUnixTime);
 
         return {
             contestParticipants: activeContests,
