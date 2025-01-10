@@ -92,51 +92,62 @@ const getUserContest = async (user_id) => {
 
 
 const GetNotificationData = async (user_id) => {
-    
     try {
+        // Validate user_id
         if (!user_id) {
             throw new Error('User ID is required');
         }
 
-        // Get current Unix timestamp
+        // Get the current Unix timestamp
         const currentUnixTime = Math.floor(Date.now() / 1000);
         console.log('Current Unix Time:', currentUnixTime);
 
-        // Use aggregation to filter by contest_id.start_date
+        // Aggregation pipeline
         const contestParticipants = await contestParticipantModel.aggregate([
+            // Step 1: Match the user_id
             {
-                $match: { user_id },
+                $match: { user_id: mongoose.Types.ObjectId(user_id) }, // Ensure user_id is an ObjectId
             },
+            // Step 2: Lookup contest details
             {
                 $lookup: {
-                    from: 'contest', // Name of the contest collection
+                    from: 'contest', // Ensure this matches your contest collection name
                     localField: 'contest_id',
                     foreignField: '_id',
                     as: 'contest',
                 },
             },
+            // Step 3: Unwind contest array to access its fields
             {
                 $unwind: '$contest',
             },
+            // Step 4: Filter contests where start_date >= currentUnixTime
             {
                 $match: { 'contest.start_date': { $gte: currentUnixTime } },
             },
+            // Step 5: Lookup user details
             {
                 $lookup: {
-                    from: 'users', // Name of the users collection
+                    from: 'users', // Ensure this matches your users collection name
                     localField: 'user_id',
                     foreignField: '_id',
                     as: 'user',
                 },
             },
+            // Step 6: Unwind user array to access its fields
             {
                 $unwind: '$user',
             },
+            // Step 7: Select only the required fields for the result
             {
                 $project: {
-                    user_id: 1,
+                    _id: 1,
                     contest_id: '$contest._id',
+                    'contest.name': 1,
                     'contest.start_date': 1,
+                    'contest.description': 1,
+                    'contest.is_paid': 1,
+                    'contest.fee': 1,
                     refundable: 1,
                     status: 1,
                     joined_at: 1,
@@ -147,21 +158,21 @@ const GetNotificationData = async (user_id) => {
             },
         ]);
 
-        console.log('Contest Participants:', contestParticipants);
+        console.log('Filtered Contest Participants:', contestParticipants);
 
-        // Return the response
+        // Return the result
         return {
             STATUS: "SUCCESSFUL",
             DB_DATA: {
                 contestParticipants,
-                contestCount: contestParticipants.length || 0,
+                contestCount: contestParticipants.length,
             },
             DESCRIPTION: contestParticipants.length
                 ? "Notification fetched successfully"
                 : "No upcoming contests found for the user",
         };
     } catch (err) {
-        console.error('Failed to get user contest:', err.message, err.stack);
+        console.error('Failed to fetch contest data:', err.message);
         return {
             STATUS: "FAILED",
             DESCRIPTION: "An error occurred while fetching notifications",
@@ -169,6 +180,8 @@ const GetNotificationData = async (user_id) => {
         };
     }
 };
+
+
 
 
 
