@@ -103,74 +103,28 @@ const GetNotificationData = async (user_id) => {
         console.log('Current Unix Time:', currentUnixTime);
 
         // Aggregation pipeline
-        const contestParticipants = await contestParticipantModel.aggregate([
-            // Step 1: Match the user_id
+        const contestParticipants = await contestParticipantModel.find({ user_id })
+            .populate([
             {
-                $match: { user_id: new mongoose.Types.ObjectId(user_id) }, // Ensure user_id is an ObjectId
+                path: 'contest_id',
+                model: 'contest',
             },
-            // Step 2: Lookup contest details
             {
-                $lookup: {
-                    from: 'contest', // Ensure this matches your contest collection name
-                    localField: 'contest_id',
-                    foreignField: '_id',
-                    as: 'contest',
-                },
-            },
-            // Step 3: Unwind contest array to access its fields
-            {
-                $unwind: '$contest',
-            },
-            // Step 4: Filter contests where start_date >= currentUnixTime
-            {
-                $match: { 'contest.start_date': { $gte: currentUnixTime } },
-            },
-            // Step 5: Lookup user details
-            {
-                $lookup: {
-                    from: 'users', // Ensure this matches your users collection name
-                    localField: 'user_id',
-                    foreignField: '_id',
-                    as: 'user',
-                },
-            },
-            // Step 6: Unwind user array to access its fields
-            {
-                $unwind: '$user',
-            },
-            // Step 7: Select only the required fields for the result
-            {
-                $project: {
-                    _id: 1,
-                    contest_id: '$contest._id',
-                    'contest.name': 1,
-                    'contest.start_date': 1,
-                    'contest.description': 1,
-                    'contest.is_paid': 1,
-                    'contest.fee': 1,
-                    refundable: 1,
-                    status: 1,
-                    joined_at: 1,
-                    'user.user_name': 1,
-                    'user.user_email': 1,
-                    'user.gender': 1,
-                },
-            },
-        ]);
+                path: 'user_id',
+                model: 'users',
+                select: 'user_name user_email gender',
+            }
+            ])
+            .select('user_id contest_id refundable status joined_at');
 
-        console.log('Filtered Contest Participants:', contestParticipants);
+        // Filter out contests that have already ended
+        const activeContests = contestParticipants.filter(contest => contest.contest_id.start_date > currentUnixTime);
 
-        // Return the result
         return {
-            STATUS: "SUCCESSFUL",
-            DB_DATA: {
-                contestParticipants,
-                contestCount: contestParticipants.length,
-            },
-            DESCRIPTION: contestParticipants.length
-                ? "Notification fetched successfully"
-                : "No upcoming contests found for the user",
+            contestParticipants: activeContests,
+            contestCount: activeContests.length
         };
+
     } catch (err) {
         console.error('Failed to fetch contest data:', err.message);
         return {
