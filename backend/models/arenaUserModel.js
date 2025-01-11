@@ -28,6 +28,11 @@ const arenauserSchema = new mongoose.Schema({
         enum: ['Male', 'Female', 'Others'],
         default: 'Male',
     },
+    user_type:{
+        type: String,
+        enum: ['User', 'Admin'],
+        default: 'User',
+    },
     updated_at: {
         type: Number,
         default: () => Math.floor(Date.now() / 1000),

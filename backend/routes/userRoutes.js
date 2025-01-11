@@ -23,13 +23,13 @@ router.post(
 
 router.get(
     '/arena',
-    // authMiddleware,
+    authMiddleware,
     userController.getArenaUser
 );
 
 router.delete(
     '/arena/user_id/:id',
-    // authMiddleware,
+    authMiddleware,
     userController.deleteArenaUser
 );
 
