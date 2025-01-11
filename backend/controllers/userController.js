@@ -290,13 +290,13 @@ const createArenaUser = async (req, res, next) => {
     }
 
 
-    if( req.user?.user_type != "Admin"){
+    // if( req.user?.user_type != "Admin"){
 
-        return res.status(401).json({
-            STATUS: "ERROR",
-            ERROR_DESCRIPTION: "You are not authorized to perform this action"
-        })
-    }
+    //     return res.status(401).json({
+    //         STATUS: "ERROR",
+    //         ERROR_DESCRIPTION: "You are not authorized to perform this action"
+    //     })
+    // }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
