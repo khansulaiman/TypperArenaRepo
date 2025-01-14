@@ -41,7 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Configure CORS options
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://typer-arena.vercel.app/'], // Replace with your frontend's domains
+    origin: ['http://localhost:3000', 'https://typer-arena.vercel.app'], // Replace with your frontend's domains
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
     optionsSuccessStatus: 204
